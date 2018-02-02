@@ -37,6 +37,11 @@ public class LollipopScanManager extends ScanManager {
 
     @Override
     public void scan(ReadableArray serviceUUIDs, final int scanSeconds, ReadableMap options,  Callback callback) {
+        scan2("", "", serviceUUIDs, scanSeconds, options, callback);
+    }
+
+    @Override
+    public void scan2(String name, String address, ReadableArray serviceUUIDs, final int scanSeconds, ReadableMap options,  Callback callback) {
         ScanSettings.Builder scanSettingsBuilder = new ScanSettings.Builder();
         List<ScanFilter> filters = new ArrayList<>();
         
@@ -53,6 +58,18 @@ public class LollipopScanManager extends ScanManager {
                 filters.add(filter);
                 Log.d(bleManager.LOG_TAG, "Filter service: " + serviceUUIDs.getString(i));
             }
+        }
+
+        if(name != null && !name.equals("")) {
+            ScanFilter filter = new ScanFilter.Builder().setDeviceName(name).build();
+            filters.add(filter);
+            Log.d(bleManager.LOG_TAG, "Filter name: " + name);
+        }
+
+        if(address != null && !address.equals("")) {
+            ScanFilter filter = new ScanFilter.Builder().setDeviceAddress(address).build();
+            filters.add(filter);
+            Log.d(bleManager.LOG_TAG, "Filter address: " + address);
         }
         
         getBluetoothAdapter().getBluetoothLeScanner().startScan(filters, scanSettingsBuilder.build(), mScanCallback);

@@ -154,6 +154,27 @@ class BleManager extends ReactContextBaseJavaModule implements ActivityEventList
 	}
 
 	@ReactMethod
+	public void scan2(String name, String address, ReadableArray serviceUUIDs, final int scanSeconds, boolean allowDuplicates, ReadableMap options, Callback callback) {
+		Log.d(LOG_TAG, "scan");
+		if (getBluetoothAdapter() == null) {
+			Log.d(LOG_TAG, "No bluetooth support");
+			callback.invoke("No bluetooth support");
+			return;
+		}
+		if (!getBluetoothAdapter().isEnabled())
+			return;
+
+		for (Iterator<Map.Entry<String, Peripheral>> iterator = peripherals.entrySet().iterator(); iterator.hasNext(); ) {
+			Map.Entry<String, Peripheral> entry = iterator.next();
+			if (!entry.getValue().isConnected()) {
+				iterator.remove();
+			}
+		}
+
+		scanManager.scan2(name, address, serviceUUIDs, scanSeconds, options, callback);
+	}
+
+	@ReactMethod
 	public void stopScan(Callback callback) {
 		Log.d(LOG_TAG, "Stop scan");
 		if (getBluetoothAdapter() == null) {

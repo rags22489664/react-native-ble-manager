@@ -36,4 +36,6 @@ public abstract class ScanManager {
 	public abstract void stopScan(Callback callback);
 
 	public abstract void scan(ReadableArray serviceUUIDs, final int scanSeconds, ReadableMap options, Callback callback);
+
+	public abstract void scan2(String name, String address, ReadableArray serviceUUIDs, final int scanSeconds, ReadableMap options, Callback callback);
 }
